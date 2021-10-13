@@ -23,8 +23,13 @@ import de.themoep.connectorplugin.LocationInfo;
 import de.themoep.globalwarps.Warp;
 import de.themoep.globalwarps.bungee.GlobalWarps;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.plugin.TabExecutor;
 
-public class SetWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
+import java.util.Collections;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+public class SetWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
 
     public SetWarpCommand(GlobalWarps plugin) {
         super(plugin, "setwarp", "globalwarps.command.setwarp", null, "Command to set a new warp", "/<command> <warp> [<server> <world> <x> <y> <z> [<yaw> [<pitch>]]", "gsetwarp", "createwarp", "gcreatewarp", "addwarp", "gaddwarp");
@@ -42,7 +47,7 @@ public class SetWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
         }
 
         LocationInfo warpLocation;
-        if (args.length > 5) {
+        if (args.length > 5 && sender.hasPermission(getPermission() + ".location")) {
             if (getPlugin().getProxy().getServerInfo(args[1]) == null) {
                 getPlugin().sendLang(sender, "error.invalid-server", "server", args[0]);
                 return true;
@@ -84,5 +89,17 @@ public class SetWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
         getPlugin().sendLang(sender, "warp-added", "warp", warp.getName());
 
         return true;
+    }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            return getPlugin().getWarpManager().getWarps().stream().map(Warp::getName).collect(Collectors.toList());
+        } else if (args.length == 2 && sender.hasPermission(getPermission() + ".location")) {
+            return getPlugin().getProxy().getServers().keySet().stream()
+                    .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptySet();
     }
 }

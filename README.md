@@ -8,21 +8,27 @@ Simple global network warp plugin depending on [ConnectorPlugin](https://github.
 > *Permission:* `globalwarps.command.warps`  
 > *Aliases:* `gwarps`, `listwarps`, `glistwarps`, `warplist`, `gwarplist`
 
-> `/warp <warp> [<player>}`  
-> *Permission:* `globalwarps.command.warp`  
+> `/warp <warp> [<player>]`  
+> *Permission:* `globalwarps.command.warp`, `globalwarps.command.warp.others`    
 > *Aliases:* `gwarp` 
 
 > `/setwarp <warp> [<server> <world> <x> <y> <z> [<yaw> [<pitch>]]`  
-> *Permission:* `globalwarps.command.setwarp`  
+> *Permission:* `globalwarps.command.setwarp`, `globalwarps.command.setwarp.location`  
 > *Aliases:* `gsetwarp`, `createwarp`, `gcreatewarp`, `addwarp`, `gaddwarp`
  
 > `/updatewarp <warp> [<server> <world> <x> <y> <z> [<yaw> [<pitch>]]`  
-> *Permission:* `globalwarps.command.updatewarp`  
+> *Permission:* `globalwarps.command.updatewarp`, `globalwarps.command.updatewarp.location`  
 > *Aliases:* `gupdatewarp`
 
 > `/delwarp <warp>`  
 > *Permission:* `globalwarps.command.delwarp`  
 > *Aliases:* `gdelwarp`, `removewarp`, `gremovewarp`
+
+Permissions for tab completion:  
+`globalwarps.command.%command name%.tabcomplete.%command alias%`  
+This is an automatic function of ConnectorPlugin's BridgedCommand in order to provide compatibility with Bukkit plugins that register conflicting commands.
+
+E.g. `globalwarps.command.delwarp.tabcomplete.removewarp` or simply `globalwarps.command.delwarp.tabcomplete.*`
 
 ## Setup
 

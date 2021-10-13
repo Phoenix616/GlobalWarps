@@ -23,8 +23,13 @@ import de.themoep.connectorplugin.LocationInfo;
 import de.themoep.globalwarps.Warp;
 import de.themoep.globalwarps.bungee.GlobalWarps;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.plugin.TabExecutor;
 
-public class DelWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
+import java.util.Collections;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+public class DelWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
 
     public DelWarpCommand(GlobalWarps plugin) {
         super(plugin, "delwarp", "globalwarps.command.delwarp", null, "Command to remove a warp", "/<command> <warp>", "gdelwarp", "removewarp", "gremovewarp");
@@ -44,5 +49,18 @@ public class DelWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
         getPlugin().saveWarps();
         getPlugin().sendLang(sender, "warp-removed", "warp", warp.getName());
         return true;
+    }
+
+    @Override
+    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            return getPlugin().getWarpManager().getWarps().stream().map(Warp::getName).collect(Collectors.toList());
+        } else if (args.length == 1) {
+            return getPlugin().getWarpManager().getWarps().stream()
+                    .map(Warp::getName)
+                    .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptySet();
     }
 }

@@ -25,6 +25,9 @@ import de.themoep.globalwarps.bungee.GlobalWarps;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
 
     public WarpCommand(GlobalWarps plugin) {
@@ -34,7 +37,13 @@ public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
     @Override
     public boolean onCommand(CommandSender sender, LocationInfo location, String label, String[] args) {
         if (args.length < 1) {
-            return false;
+            List<Warp> warps = getPlugin().getWarpManager().getWarps().stream().sorted().collect(Collectors.toList());
+            getPlugin().sendLang(sender, "warps.head", "count", String.valueOf(warps.size()));
+            for (Warp warp : warps) {
+                getPlugin().sendLang(sender, "warps.entry", warp.getReplacements());
+            }
+            getPlugin().sendLang(sender, "warps.footer", "count", String.valueOf(warps.size()));
+            return true;
         }
 
         Warp warp = getPlugin().getWarpManager().getWarp(args[0]);

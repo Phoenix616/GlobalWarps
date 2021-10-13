@@ -30,11 +30,16 @@ import java.util.stream.Collectors;
 public class WarpsCommand extends BridgedCommand<GlobalWarps, CommandSender> {
 
     public WarpsCommand(GlobalWarps plugin) {
-        super(plugin, "warp", "globalwarps.command.warp", null, "Warp command", "/<command> <warp> [<player>]", "gwarp");
+        super(plugin, "warps", "globalwarps.command.warps", null, "Warp command", "/<command> <warp> [<player>]", "gwarps", "globalwarps");
     }
 
     @Override
     public boolean onCommand(CommandSender sender, LocationInfo location, String label, String[] args) {
+        if (args.length > 0 && "reload".equalsIgnoreCase(args[0]) && sender.hasPermission("globalwarps.command.reload")) {
+            getPlugin().loadConfig();
+            sender.sendMessage("Config reloaded!");
+            return true;
+        }
         List<Warp> warps = getPlugin().getWarpManager().getWarps().stream().sorted().collect(Collectors.toList());
         getPlugin().sendLang(sender, "warps.head", "count", String.valueOf(warps.size()));
         for (Warp warp : warps) {

@@ -81,7 +81,7 @@ public class SetWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
 
         getPlugin().getWarpManager().addWarp(warp);
         getPlugin().saveWarps();
-        getPlugin().sendLang(sender, "warp-updated", "warp", warp.getName());
+        getPlugin().sendLang(sender, "warp-added", "warp", warp.getName());
 
         return true;
     }

@@ -60,7 +60,7 @@ public final class GlobalWarps extends BungeePlugin implements GlobalWarpsPlugin
         loadConfig();
     }
 
-    private void loadConfig() {
+    public void loadConfig() {
         try {
             getConfig().loadConfig();
         } catch (IOException e) {

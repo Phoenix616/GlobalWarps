@@ -57,7 +57,11 @@ public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> {
             return false;
         }
 
-        getPlugin().getConnector().getBridge().teleport(target.getName(), warp, sender::sendMessage).thenAccept(success -> {
+        getPlugin().getConnector().getBridge().teleport(target.getName(), warp, s -> {
+            if (target != sender) {
+                getPlugin().sendLang(sender, "reply", "value", s);
+            }
+        }).thenAccept(success -> {
             if (success) {
                 getPlugin().sendLang(sender, "warped", "warp", warp.getName());
             } else {

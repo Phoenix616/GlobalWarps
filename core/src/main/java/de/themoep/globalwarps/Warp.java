@@ -39,6 +39,7 @@ public class Warp extends LocationInfo implements Comparable<Warp> {
 
     public String[] getReplacements() {
         return new String[] {
+                "name", getName(),
                 "server", getServer(),
                 "world", getWorld(),
                 "x", String.valueOf(Math.round(getX())),

@@ -1,0 +1,6 @@
+name: GlobalWarps
+version: '${minecraft.plugin.version}'
+main: de.themoep.globalwarps.bungee.GlobalWarps
+author: Phoenix616
+depends:
+- ConnectorPlugin

@@ -1,0 +1,22 @@
+warps:
+  head: "&purple&%count% warps available:"
+  entry: |-
+    &gray&- [%name%](yellow run_command=/gwarp %name% hover=&yellow&%name%
+    &purple&Server: &yellow&%server%
+    &purple&World: &yellow&%world%
+    &purple&X/Y/Z: &yellow&%x%&purple&/&yellow&%y%&purple&/&yellow&%z%
+    &purple&Yaw: &yellow&%yaw% &purple&Pitch: &yellow&%pitch%
+    )
+  footer: ""
+warped: "&gren&Teleported to %warp%"
+warp-added: "&green&Warp %warp% was added!"
+warp-updated: "&green&Warp %warp% was updated!"
+warp-removed: "&yellow&Warp %warp% was removed!"
+error:
+  warping: "&red&Could not warp to %warp%"
+  invalid-input: "&red&Invalid input: %error%"
+  invalid-server: "&red&The server %server% doesn't exist"
+  invalid-warp: "&red&The warp %warp% doesn't exist"
+  player-not-found: "&red&The player %player% isn't online"
+  warp-already-exists: "&red&A warp with the name %warp% already exists! Use [/updatewarp](yellow suggest_command=/updatewarp) to change the position."
+  console-missing-arguments: "&red&Additional arguments required to use from console!"

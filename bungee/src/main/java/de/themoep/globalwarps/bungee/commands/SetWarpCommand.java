@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class SetWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
 
     public SetWarpCommand(GlobalWarps plugin) {
-        super(plugin, "setwarp", "globalwarps.command.setwarp", null, "Command to set a new warp", "/<command> <warp> [<server> <world> <x> <y> <z> [<yaw> [<pitch>]]", "gsetwarp", "createwarp", "gcreatewarp", "addwarp", "gaddwarp");
+        super(plugin, "gsetwarp", "globalwarps.command.setwarp", null, "Command to set a new warp", "/<command> <warp> [<server> <world> <x> <y> <z> [<yaw> [<pitch>]]", "setwarp", "gcreatewarp", "createwarp", "gaddwarp", "addwarp");
     }
 
     @Override

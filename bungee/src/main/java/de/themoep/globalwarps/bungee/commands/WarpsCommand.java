@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class WarpsCommand extends BridgedCommand<GlobalWarps, CommandSender> {
 
     public WarpsCommand(GlobalWarps plugin) {
-        super(plugin, "warps", "globalwarps.command.warps", null, "Warp command", "/<command> <warp> [<player>]", "gwarps", "globalwarps");
+        super(plugin, "gwarps", "globalwarps.command.warps", null, "Warp command", "/<command> <warp> [<player>]", "warps", "globalwarps");
     }
 
     @Override

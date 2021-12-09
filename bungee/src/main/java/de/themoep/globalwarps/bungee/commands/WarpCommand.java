@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
 
     public WarpCommand(GlobalWarps plugin) {
-        super(plugin, "warp", "globalwarps.command.warp", null, "Warp command", "/<command> <warp> [<player>]", "gwarp");
+        super(plugin, "gwarp", "globalwarps.command.warp", null, "Warp command", "/<command> <warp> [<player>]", "warp");
     }
 
     @Override

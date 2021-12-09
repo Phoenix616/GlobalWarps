@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class DelWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
 
     public DelWarpCommand(GlobalWarps plugin) {
-        super(plugin, "delwarp", "globalwarps.command.delwarp", null, "Command to remove a warp", "/<command> <warp>", "gdelwarp", "removewarp", "gremovewarp");
+        super(plugin, "gdelwarp", "globalwarps.command.delwarp", null, "Command to remove a warp", "/<command> <warp>", "delwarp", "gdeletewarp", "deletewarp", "gremovewarp", "removewarp");
     }
 
     @Override

@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class UpdateWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
 
     public UpdateWarpCommand(GlobalWarps plugin) {
-        super(plugin, "updatewarp", "globalwarps.command.updatewarp", null, "Command to update the location of a warp", "/<command> <warp> [<server> <world> <x> <y> <z> [<yaw> [<pitch>]]", "gupdatewarp");
+        super(plugin, "gupdatewarp", "globalwarps.command.updatewarp", null, "Command to update the location of a warp", "/<command> <warp> [<server> <world> <x> <y> <z> [<yaw> [<pitch>]]", "updatewarp");
     }
 
     @Override

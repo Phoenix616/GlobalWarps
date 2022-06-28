@@ -7,7 +7,7 @@
     <parent>
         <groupId>de.themoep.globalwarps</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>plugin</artifactId>
@@ -29,6 +29,12 @@
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>bungee</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>velocity</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
@@ -70,7 +76,7 @@
                         </relocation>
                         <relocation>
                             <pattern>de.themoep.minedown</pattern>
-                            <shadedPattern>de.themoep.globalwarps.lib.minedown.bungee</shadedPattern>
+                            <shadedPattern>de.themoep.globalwarps.lib.minedown</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

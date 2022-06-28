@@ -20,26 +20,30 @@ package de.themoep.globalwarps.bungee;
 
 import de.themoep.bungeeplugin.BungeePlugin;
 import de.themoep.bungeeplugin.FileConfiguration;
-import de.themoep.connectorplugin.ConnectorPlugin;
 import de.themoep.connectorplugin.LocationInfo;
+import de.themoep.connectorplugin.ProxyBridgeCommon;
 import de.themoep.connectorplugin.bungee.BungeeConnectorPlugin;
 import de.themoep.globalwarps.GlobalWarpsPlugin;
 import de.themoep.globalwarps.Warp;
 import de.themoep.globalwarps.WarpManager;
-import de.themoep.globalwarps.bungee.commands.DelWarpCommand;
-import de.themoep.globalwarps.bungee.commands.SetWarpCommand;
-import de.themoep.globalwarps.bungee.commands.UpdateWarpCommand;
-import de.themoep.globalwarps.bungee.commands.WarpCommand;
-import de.themoep.globalwarps.bungee.commands.WarpsCommand;
+import de.themoep.globalwarps.commands.DelWarpCommand;
+import de.themoep.globalwarps.commands.GlobalCommandSender;
+import de.themoep.globalwarps.commands.SetWarpCommand;
+import de.themoep.globalwarps.commands.UpdateWarpCommand;
+import de.themoep.globalwarps.commands.WarpCommand;
+import de.themoep.globalwarps.commands.WarpsCommand;
 import de.themoep.minedown.MineDown;
 import de.themoep.utils.lang.bungee.LanguageManager;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
-public final class GlobalWarps extends BungeePlugin implements GlobalWarpsPlugin {
+public final class GlobalWarps extends BungeePlugin implements GlobalWarpsPlugin<CommandSender> {
 
     private LanguageManager lang;
     private WarpManager warpManager;
@@ -51,11 +55,11 @@ public final class GlobalWarps extends BungeePlugin implements GlobalWarpsPlugin
     public void onEnable() {
         connector = (BungeeConnectorPlugin) getProxy().getPluginManager().getPlugin("ConnectorPlugin");
 
-        connector.getBridge().registerServerCommand(new WarpsCommand(this));
-        connector.getBridge().registerServerCommand(new WarpCommand(this));
-        connector.getBridge().registerServerCommand(new SetWarpCommand(this));
-        connector.getBridge().registerServerCommand(new DelWarpCommand(this));
-        connector.getBridge().registerServerCommand(new UpdateWarpCommand(this));
+        connector.getBridge().registerServerCommand(new WarpsCommand<>(this));
+        connector.getBridge().registerServerCommand(new WarpCommand<>(this));
+        connector.getBridge().registerServerCommand(new SetWarpCommand<>(this));
+        connector.getBridge().registerServerCommand(new DelWarpCommand<>(this));
+        connector.getBridge().registerServerCommand(new UpdateWarpCommand<>(this));
 
         loadConfig();
     }
@@ -94,6 +98,11 @@ public final class GlobalWarps extends BungeePlugin implements GlobalWarpsPlugin
     }
 
     @Override
+    public boolean serverExists(String serverName) {
+        return getProxy().getServerInfo(serverName) != null;
+    }
+
+    @Override
     public void saveWarps() {
         Configuration warpsSection = warpsConfig.getSection("warps");
         for (Warp warp : getWarpManager().getWarps()) {
@@ -109,17 +118,44 @@ public final class GlobalWarps extends BungeePlugin implements GlobalWarpsPlugin
         warpsConfig.saveConfig();
     }
 
+    @Override
+    public void removeWarp(String warpName) {
+        warpsConfig.set("warps." + warpName, null);
+        warpsConfig.saveConfig();
+    }
+
     public BaseComponent[] getLang(CommandSender sender, String key, String... replacements) {
         return MineDown.parse(lang.getConfig(sender).get(key), replacements);
     }
 
-    public void sendLang(CommandSender sender, String key, String... replacements) {
-        sender.sendMessage(getLang(sender, key, replacements));
+    public void sendLang(GlobalCommandSender<CommandSender> sender, String key, String... replacements) {
+        sender.getSender().sendMessage(getLang(sender.getSender(), key, replacements));
     }
 
     @Override
-    public BungeeConnectorPlugin getConnector() {
-        return connector;
+    public Collection<String> getServers() {
+        return getProxy().getServers().keySet();
+    }
+
+    @Override
+    public Collection<String> getOnlinePlayerNames() {
+        return getProxy().getPlayers().stream().map(CommandSender::getName).collect(Collectors.toSet());
+    }
+
+    @Override
+    public GlobalCommandSender<CommandSender> getPlayer(String playerName) {
+        ProxiedPlayer player = getProxy().getPlayer(playerName);
+        return player != null ? getSender(player) : null;
+    }
+
+    @Override
+    public GlobalCommandSender<CommandSender> getSender(CommandSender sender) {
+        return new BungeeCommandSender(sender);
+    }
+
+    @Override
+    public ProxyBridgeCommon<BungeeConnectorPlugin, ProxiedPlayer> getBridge() {
+        return connector.getBridge();
     }
 
     @Override

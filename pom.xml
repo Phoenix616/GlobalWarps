@@ -7,7 +7,7 @@
 
     <groupId>de.themoep.globalwarps</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>${plugin.name}</name>
 
@@ -18,12 +18,13 @@
         <minecraft.plugin.version>${project.version} ${buildDescription}</minecraft.plugin.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <dependency.connectorplugin.version>1.2-SNAPSHOT</dependency.connectorplugin.version>
+        <dependency.connectorplugin.version>1.4-SNAPSHOT</dependency.connectorplugin.version>
     </properties>
 
     <modules>
         <module>core</module>
         <module>bungee</module>
+        <module>velocity</module>
         <module>plugin</module>
     </modules>
 

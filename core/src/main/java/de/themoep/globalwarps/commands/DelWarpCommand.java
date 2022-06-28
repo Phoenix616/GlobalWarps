@@ -1,8 +1,8 @@
-package de.themoep.globalwarps.bungee.commands;
+package de.themoep.globalwarps.commands;
 
 /*
- * ConnectorPlugin
- * Copyright (C) 2021 Max Lee aka Phoenix616 (max@themoep.de)
+ * GlobalWarps
+ * Copyright (C) 2022 Max Lee aka Phoenix616 (max@themoep.de)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -18,25 +18,23 @@ package de.themoep.globalwarps.bungee.commands;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import de.themoep.connectorplugin.BridgedCommand;
 import de.themoep.connectorplugin.LocationInfo;
+import de.themoep.globalwarps.GlobalWarpsPlugin;
 import de.themoep.globalwarps.Warp;
-import de.themoep.globalwarps.bungee.GlobalWarps;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.plugin.TabExecutor;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class DelWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
+public class DelWarpCommand<P extends GlobalWarpsPlugin<S>, S> extends GlobalCommand<P, S> {
 
-    public DelWarpCommand(GlobalWarps plugin) {
+    public DelWarpCommand(P plugin) {
         super(plugin, "gdelwarp", "globalwarps.command.delwarp", null, "Command to remove a warp", "/<command> <warp>", "delwarp", "gdeletewarp", "deletewarp", "gremovewarp", "removewarp");
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, LocationInfo location, String label, String[] args) {
+    public boolean onCommand(GlobalCommandSender<S> sender, LocationInfo location, String label, String[] args) {
         if (args.length < 1) {
             return false;
         }
@@ -46,13 +44,13 @@ public class DelWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> i
             getPlugin().sendLang(sender, "error.invalid-warp", "warp", args[0]);
             return true;
         }
-        getPlugin().saveWarps();
+        getPlugin().removeWarp(warp.getName());
         getPlugin().sendLang(sender, "warp-removed", "warp", warp.getName());
         return true;
     }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(GlobalCommandSender<S> sender, String label, String[] args) {
         if (args.length == 0) {
             return getPlugin().getWarpManager().getWarps().stream().map(Warp::getName).collect(Collectors.toList());
         } else if (args.length == 1) {
@@ -61,6 +59,6 @@ public class DelWarpCommand extends BridgedCommand<GlobalWarps, CommandSender> i
                     .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
                     .collect(Collectors.toList());
         }
-        return Collections.emptySet();
+        return Collections.emptyList();
     }
 }

@@ -1,0 +1,8 @@
+{
+  "id": "globalwarps",
+  "name": "GlobalWarps",
+  "version": "${minecraft.plugin.version}",
+  "main": "de.themoep.globalwarps.velocity.GlobalWarps",
+  "authors": ["Phoenix616"],
+  "depends": ["connectorplugin"]
+}

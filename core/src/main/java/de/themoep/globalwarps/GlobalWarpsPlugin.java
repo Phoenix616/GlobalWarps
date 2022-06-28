@@ -18,14 +18,33 @@ package de.themoep.globalwarps;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import de.themoep.connectorplugin.ConnectorPlugin;
+import de.themoep.connectorplugin.ProxyBridgeCommon;
 import de.themoep.connectorplugin.connector.ConnectingPlugin;
+import de.themoep.globalwarps.commands.GlobalCommandSender;
 
-public interface GlobalWarpsPlugin extends ConnectingPlugin {
+import java.util.Collection;
+
+public interface GlobalWarpsPlugin<S> extends ConnectingPlugin {
 
     void saveWarps();
 
-    ConnectorPlugin getConnector();
+    void removeWarp(String warpName);
 
     WarpManager getWarpManager();
+
+    void sendLang(GlobalCommandSender<S> sender, String key, String... replacements);
+
+    Collection<String> getServers();
+
+    Collection<String> getOnlinePlayerNames();
+
+    GlobalCommandSender<S> getPlayer(String playerName);
+
+    GlobalCommandSender<S> getSender(S sender);
+
+    ProxyBridgeCommon<?, ?> getBridge();
+
+    void loadConfig();
+
+    boolean serverExists(String serverName);
 }

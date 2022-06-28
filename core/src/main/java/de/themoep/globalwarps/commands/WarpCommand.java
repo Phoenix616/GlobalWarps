@@ -1,8 +1,8 @@
-package de.themoep.globalwarps.bungee.commands;
+package de.themoep.globalwarps.commands;
 
 /*
- * ConnectorPlugin
- * Copyright (C) 2021 Max Lee aka Phoenix616 (max@themoep.de)
+ * GlobalWarps
+ * Copyright (C) 2022 Max Lee aka Phoenix616 (max@themoep.de)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -18,27 +18,23 @@ package de.themoep.globalwarps.bungee.commands;
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import de.themoep.connectorplugin.BridgedCommand;
 import de.themoep.connectorplugin.LocationInfo;
+import de.themoep.globalwarps.GlobalWarpsPlugin;
 import de.themoep.globalwarps.Warp;
-import de.themoep.globalwarps.bungee.GlobalWarps;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.TabExecutor;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> implements TabExecutor {
+public class WarpCommand<P extends GlobalWarpsPlugin<S>, S> extends GlobalCommand<P, S> {
 
-    public WarpCommand(GlobalWarps plugin) {
+    public WarpCommand(P plugin) {
         super(plugin, "gwarp", "globalwarps.command.warp", null, "Warp command", "/<command> <warp> [<player>]", "warp");
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, LocationInfo location, String label, String[] args) {
+    public boolean onCommand(GlobalCommandSender<S> sender, LocationInfo location, String label, String[] args) {
         if (args.length < 1) {
             if (!sender.hasPermission("globalwarps.command.warps")) {
                 return false;
@@ -58,21 +54,21 @@ public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> impl
             return true;
         }
 
-        ProxiedPlayer target;
+        GlobalCommandSender<S> target;
         if (args.length > 1 && sender.hasPermission(getPermission() + ".others")) {
-            target = getPlugin().getProxy().getPlayer(args[1]);
+            target = getPlugin().getPlayer(args[1]);
             if (target == null) {
                 getPlugin().sendLang(sender, "error.player-not-found", "player", args[1]);
                 return true;
             }
-        } else if (sender instanceof ProxiedPlayer) {
-            target = (ProxiedPlayer) sender;
+        } else if (sender.isPlayer()) {
+            target = sender;
         } else {
             getPlugin().sendLang(sender, "error.console-missing-arguments");
             return false;
         }
 
-        getPlugin().getConnector().getBridge().teleport(target.getName(), warp, s -> {
+        getPlugin().getBridge().teleport(target.getName(), warp, s -> {
             if (target != sender) {
                 getPlugin().sendLang(sender, "reply", "value", s);
             }
@@ -87,7 +83,7 @@ public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> impl
     }
 
     @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+    public List<String> onTabComplete(GlobalCommandSender<S> sender, String label, String[] args) {
         if (args.length == 0) {
             return getPlugin().getWarpManager().getWarps().stream().map(Warp::getName).collect(Collectors.toList());
         } else if (args.length == 1) {
@@ -96,11 +92,10 @@ public class WarpCommand extends BridgedCommand<GlobalWarps, CommandSender> impl
                     .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
                     .collect(Collectors.toList());
         } else if (args.length == 2 && sender.hasPermission(getPermission() + ".others")) {
-            return getPlugin().getProxy().getPlayers().stream()
-                    .map(ProxiedPlayer::getName)
+            return getPlugin().getOnlinePlayerNames().stream()
                     .filter(s -> s.toLowerCase(Locale.ROOT).startsWith(args[0].toLowerCase(Locale.ROOT)))
                     .collect(Collectors.toList());
         }
-        return Collections.emptySet();
+        return Collections.emptyList();
     }
 }

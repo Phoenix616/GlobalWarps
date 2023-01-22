@@ -104,6 +104,7 @@ public final class GlobalWarps implements GlobalWarpsPlugin<CommandSource>, Lang
 
         try {
             warpsConfig = new PluginConfig(this, new File(dataFolder, "warps.yml"));
+            warpsConfig.load();
             ConfigurationNode warpsSection = warpsConfig.getRawConfig("warps");
             if (warpsSection.isMap()) {
                 for (Map.Entry<Object, ? extends ConfigurationNode> warpEntry : warpsSection.getChildrenMap().entrySet()) {
